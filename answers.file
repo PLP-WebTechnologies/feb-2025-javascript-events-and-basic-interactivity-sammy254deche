@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JavaScript Playground</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>JavaScript Playground</h1>
+  <button id="magicBtn">Click Me!</button>
+  <p id="hoverText">Hover over me!</p>
+  <input type="text" id="keyInput" placeholder="Type something..." />
+
+  <div class="gallery">
+    <img id="galleryImg" src="https://via.placeholder.com/300" alt="Gallery" />
+    <button id="nextImg">Next Image</button>
+  </div>
+
+  <div class="tabs">
+    <button class="tab" data-target="tab1">Tab 1</button>
+    <button class="tab" data-target="tab2">Tab 2</button>
+    <div id="tab1" class="tab-content active">This is tab 1 content.</div>
+    <div id="tab2" class="tab-content hidden">This is tab 2 content.</div>
+  </div>
+
+  <form id="signupForm">
+    <input type="text" id="name" placeholder="Name" required />
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <button type="submit">Sign Up</button>
+    <p id="formFeedback"></p>
+  </form>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+button {
+  margin: 10px 0;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+#hoverText {
+  background-color: #f0f0f0;
+  padding: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.gallery img {
+  max-width: 300px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.tab-content {
+  display: none;
+  margin-top: 10px;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.hidden {
+  display: none;
+}
+
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const magicBtn = document.getElementById("magicBtn");
+  const hoverText = document.getElementById("hoverText");
+  const keyInput = document.getElementById("keyInput");
+  const galleryImg = document.getElementById("galleryImg");
+  const nextImg = document.getElementById("nextImg");
+  const tabs = document.querySelectorAll(".tab");
+  const tabContents = document.querySelectorAll(".tab-content");
+  const form = document.getElementById("signupForm");
+  const feedback = document.getElementById("formFeedback");
+  const passwordInput = document.getElementById("password");
+
+  // Click Event
+  magicBtn.addEventListener("click", () => {
+    magicBtn.textContent = "You clicked me!";
+    magicBtn.style.backgroundColor = "lightgreen";
+  });
+
+  // Hover Event
+  hoverText.addEventListener("mouseover", () => {
+    hoverText.style.backgroundColor = "lightblue";
+  });
+  hoverText.addEventListener("mouseout", () => {
+    hoverText.style.backgroundColor = "#f0f0f0";
+  });
+
+  // Keypress Event
+  keyInput.addEventListener("keypress", (e) => {
+    console.log(`You typed: ${e.key}`);
+  });
+
+  // Double-click Event
+  magicBtn.addEventListener("dblclick", () => {
+    alert("Double-click magic activated!");
+  });
+
+  // Image Gallery
+  const images = [
+    "https://via.placeholder.com/300",
+    "https://via.placeholder.com/300/ff0000",
+    "https://via.placeholder.com/300/00ff00",
+    "https://via.placeholder.com/300/0000ff"
+  ];
+  let currentImg = 0;
+  nextImg.addEventListener("click", () => {
+    currentImg = (currentImg + 1) % images.length;
+    galleryImg.src = images[currentImg];
+  });
+
+  // Tab System
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      tabContents.forEach(content => content.classList.remove("active"));
+      document.getElementById(tab.dataset.target).classList.add("active");
+    });
+  });
+
+  // Form Validation
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const email = document.getElementById("email").value;
+    const password = passwordInput.value;
+    const emailPattern = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+
+    if (!emailPattern.test(email)) {
+      feedback.textContent = "Please enter a valid email.";
+      return;
+    }
+
+    if (password.length < 8) {
+      feedback.textContent = "Password must be at least 8 characters.";
+      return;
+    }
+
+    feedback.textContent = "Form submitted successfully!";
+  });
+
+  // Real-time Feedback
+  passwordInput.addEventListener("input", () => {
+    if (passwordInput.value.length < 8) {
+      feedback.textContent = "Password too short.";
+    } else {
+      feedback.textContent = "";
+    }
+  });
+});
+
